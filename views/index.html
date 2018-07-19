@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Stock Checker</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="./public/style.css">
+</head>
+
+<body>
+
+
+	<header>
+		<h1>Stock Checker</h1>
+	</header>
+
+
+	<div class="userstories">
+		<h2>A freeCodeCamp Information Security &amp; Quality Assurance Project</h2>
+		<blockquote>
+			<p>This challange makes use of NodeJS, ExpressJS, MongoDB, HelmetJS and Chai.</p>
+		</blockquote>
+	</div>
+
+
+	<div id="userstories">
+		<blockquote>
+			<h3>User Stories</h3>
+			<ol>
+				<li>Set the content security policies to only allow loading of scripts and css from your server.</li>
+				<li>I can
+					<b>GET</b>
+					<code>/api/stock-prices</code> with form data containing a Nasdaq
+					<i>stock</i> ticker and recieve back an object
+					<i>stockData</i>.</li>
+				<li>In
+					<i>stockData</i>, I can see the
+					<i>stock</i> (string, the ticker),
+					<i>price</i> (decimal in string format), and
+					<i>likes</i> (int).</li>
+				<li>I can also pass along field
+					<i>like</i> as
+					<b>true</b> (boolean) to have my like added to the stock(s). Only 1 like per ip should be accepted.</li>
+				<li>If I pass along 2 stocks, the return object will be an array with both stock's info but instead of
+					<i>likes</i>, it will display
+					<i>rel_likes</i> (the difference between the likes on both) on both.</li>
+				<li>A good way to receive current price is the following external API (replacing 'GOOG, MSFT' with your stock):
+					<br /></br?><code>https://api.iextrading.com/1.0/stock/market/batch?symbols=GOOG,MSFT&types=price`</code>
+				</li>
+				<li>All 5 functional tests are complete and passing.</li>
+			</ol>
+		</blockquote>
+
+
+		<h3>Example usage:</h3>
+		<code>/api/stock-prices?stock=goog</code>
+		<br>
+		<code>/api/stock-prices?stock=goog&amp;like=true</code>
+		<br>
+		<code>/api/stock-prices?stock=goog&amp;stock=msft</code>
+		<br>
+		<code>/api/stock-prices?stock=goog&amp;stock=msft&amp;like=true</code>
+		<br>
+		<h3>Example return:</h3>
+		<code>{"stockData":{"stock":"GOOG","price":"786.90","likes":1}}</code>
+		<br>
+		<code>{"stockData":[{"stock":"MSFT","price":"62.30","rel_likes":-1},{"stock":"GOOG","price":"786.90","rel_likes":1}]}</code>
+	</div>
+
+  <h2>Front-End:</h2>
+
+  <!--  JSON Result  -->
+  <div class="jsonresult">
+    <h3>Json Results:</h3>
+    <code id="jsonResult"></code>
+  </div>
+  
+  <!--  Front-end Interface  -->
+	<div id="testui">
+		<h3>Get single price and total likes</h3>
+
+		<form id="testForm2" class="border">
+			<input type="text" name="stock" placeholder="goog" required="">
+			<input type="checkbox" name="like" value="true"> Like?
+			<br>
+			<button type="submit">Get Price!</button>
+		</form>
+
+		<h3 style="margin-top: 50px;">Compare and get relative likes</h3>
+		<form id="testForm" class="border">
+			<input type="text" name="stock" placeholder="goog" required="">
+			<input type="text" name="stock" placeholder="msft" required="">
+			<input type="checkbox" name="like" value="true"> Like both?
+			<br>
+			<button type="submit">Get Price!</button>
+		</form>
+	</div>
+
+
+
+	<!--   Footer   -->
+	<footer>
+		<p>Code and Design by
+			<a href="http://seanmurphy.eu/" target="_blank">Sean Murphy</a>
+		</p>
+	</footer>
+
+
+
+	<!-- Your web-app is https, so your scripts need to be too -->
+	<script src="https://code.jquery.com/jquery-2.2.1.min.js" integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+	    crossorigin="anonymous"></script>
+	<script>
+		$(function () {
+			$('#testForm').submit(function (e) {
+				$.ajax({
+					url: '/api/stock-prices',
+					type: 'get',
+					data: $('#testForm').serialize(),
+					success: function (data) {
+						$('#jsonResult').text(JSON.stringify(data));
+					}
+				});
+				e.preventDefault();
+			});
+			$('#testForm2').submit(function (e) {
+				$.ajax({
+					url: '/api/stock-prices',
+					type: 'get',
+					data: $('#testForm2').serialize(),
+					success: function (data) {
+						$('#jsonResult').text(JSON.stringify(data));
+					}
+				});
+				e.preventDefault();
+			});
+		});
+	</script>
+</body>
+
+</html>
